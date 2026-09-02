@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Online Shop</title>
+
+    <style>
+      .card {
+        width: 300px;
+        height: 300px;
+        border: 1px solid rgb(214, 34, 34);
+        border-radius: 10px;
+        margin: 50px auto;
+        padding: 20px;
+      }
+
+      .title {
+        text-align: center;
+      }
+
+      .item {
+        text-align: left;
+        font-size: 18px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="shop"></div>
+
+    <script>
+      let card = document.createElement("div");
+      card.className = "card";
+
+      let title = document.createElement("h2");
+      title.className = "title";
+      title.innerText = "Online Shop";
+
+      let tea = document.createElement("p");
+      tea.className = "item";
+      tea.innerText = "Tea : 100";
+
+      let coffee = document.createElement("p");
+      coffee.className = "item";
+      coffee.innerText = "Coffee : 200";
+
+      let rice = document.createElement("p");
+      rice.className = "item";
+      rice.innerText = "Rice : 500";
+
+      let wheat = document.createElement("p");
+      wheat.className = "item";
+      wheat.innerText = "Wheat : 700";
+
+      card.appendChild(title);
+      card.appendChild(tea);
+      card.appendChild(coffee);
+      card.appendChild(rice);
+      card.appendChild(wheat);
+
+      document.getElementById("shop").appendChild(card);
+    </script>
+  </body>
+</html>

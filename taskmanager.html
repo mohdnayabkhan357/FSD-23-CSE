@@ -1,0 +1,320 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Task Manager</title>
+
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+      }
+
+      body {
+        background: #f4f6f8;
+        padding: 40px;
+      }
+
+      .container {
+        width: 700px;
+        margin: auto;
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 25px;
+        color: #222;
+      }
+
+      /* Add Task Box */
+      .add-box {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      #taskInput {
+        flex: 1;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 16px;
+      }
+
+      button {
+        border: none;
+        padding: 12px 18px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 15px;
+      }
+
+      .add-btn {
+        background: #007bff;
+        color: white;
+      }
+
+      .add-btn:hover {
+        background: #0056b3;
+      }
+
+      /* Task Statistics */
+      .stats {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+
+      .stat-box {
+        background: white;
+        flex: 1;
+        padding: 20px;
+        text-align: center;
+        border-radius: 10px;
+      }
+
+      .stat-box h3 {
+        color: #555;
+        margin-bottom: 8px;
+      }
+
+      .stat-number {
+        font-size: 25px;
+        font-weight: bold;
+      }
+
+      /* Filters */
+      .filters {
+        background: white;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        display: flex;
+        gap: 10px;
+      }
+
+      .filter-btn {
+        background: #e9ecef;
+      }
+
+      .filter-btn.active {
+        background: #007bff;
+        color: white;
+      }
+
+      /* Task List */
+      .task {
+        background: white;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .task span {
+        flex: 1;
+        font-size: 17px;
+      }
+
+      .task.completed span {
+        text-decoration: line-through;
+        color: gray;
+      }
+
+      .delete-btn {
+        background: #dc3545;
+        color: white;
+      }
+
+      .delete-btn:hover {
+        background: #b02a37;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Student Task Manager</h1>
+
+      <!-- Enter Task -->
+      <div class="add-box">
+        <input type="text" id="taskInput" placeholder="Enter your task" />
+
+        <button class="add-btn" onclick="addTask()">Add Task</button>
+      </div>
+
+      <!-- Task Statistics -->
+      <div class="stats">
+        <div class="stat-box">
+          <h3>Total Tasks</h3>
+          <div class="stat-number" id="totalTasks">0</div>
+        </div>
+
+        <div class="stat-box">
+          <h3>Completed</h3>
+          <div class="stat-number" id="completedTasks">0</div>
+        </div>
+
+        <div class="stat-box">
+          <h3>Pending</h3>
+          <div class="stat-number" id="pendingTasks">0</div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="filters">
+        <button class="filter-btn active" onclick="filterTasks('all', this)">
+          All Tasks
+        </button>
+
+        <button class="filter-btn" onclick="filterTasks('pending', this)">
+          Pending Tasks
+        </button>
+
+        <button class="filter-btn" onclick="filterTasks('completed', this)">
+          Completed Tasks
+        </button>
+      </div>
+
+      <!-- Task List -->
+      <div id="taskList">
+        <div class="task">
+          <input type="checkbox" onchange="toggleTask(this)" />
+
+          <span>SIH Project</span>
+
+          <button class="delete-btn" onclick="deleteTask(this)">Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Add New Task
+      function addTask() {
+        let input = document.getElementById("taskInput");
+        let taskText = input.value.trim();
+
+        if (taskText === "") {
+          alert("Please enter a task!");
+          return;
+        }
+
+        let taskList = document.getElementById("taskList");
+
+        let task = document.createElement("div");
+        task.className = "task";
+
+        task.innerHTML = `
+                <input
+                    type="checkbox"
+                    onchange="toggleTask(this)"
+                >
+
+                <span>${taskText}</span>
+
+                <button
+                    class="delete-btn"
+                    onclick="deleteTask(this)">
+                    Delete
+                </button>
+            `;
+
+        taskList.appendChild(task);
+
+        input.value = "";
+
+        updateStats();
+      }
+
+      // Complete / Uncomplete Task
+      function toggleTask(checkbox) {
+        let task = checkbox.parentElement;
+
+        if (checkbox.checked) {
+          task.classList.add("completed");
+        } else {
+          task.classList.remove("completed");
+        }
+
+        updateStats();
+      }
+
+      // Delete Task
+      function deleteTask(button) {
+        let task = button.parentElement;
+
+        task.remove();
+
+        updateStats();
+      }
+
+      // Update Total, Completed and Pending
+      function updateStats() {
+        let tasks = document.querySelectorAll(".task");
+
+        let total = tasks.length;
+        let completed = 0;
+
+        tasks.forEach(function (task) {
+          let checkbox = task.querySelector("input");
+
+          if (checkbox.checked) {
+            completed++;
+          }
+        });
+
+        let pending = total - completed;
+
+        document.getElementById("totalTasks").innerText = total;
+        document.getElementById("completedTasks").innerText = completed;
+        document.getElementById("pendingTasks").innerText = pending;
+      }
+
+      // Filter Tasks
+      function filterTasks(type, button) {
+        let tasks = document.querySelectorAll(".task");
+
+        // Remove active from all buttons
+        document.querySelectorAll(".filter-btn").forEach(function (btn) {
+          btn.classList.remove("active");
+        });
+
+        // Add active to clicked button
+        button.classList.add("active");
+
+        tasks.forEach(function (task) {
+          let checkbox = task.querySelector("input");
+
+          if (type === "all") {
+            task.style.display = "flex";
+          } else if (type === "completed") {
+            if (checkbox.checked) {
+              task.style.display = "flex";
+            } else {
+              task.style.display = "none";
+            }
+          } else if (type === "pending") {
+            if (!checkbox.checked) {
+              task.style.display = "flex";
+            } else {
+              task.style.display = "none";
+            }
+          }
+        });
+      }
+
+      // Initial Statistics
+      updateStats();
+    </script>
+  </body>
+</html>
+```

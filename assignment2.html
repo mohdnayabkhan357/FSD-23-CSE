@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registration Form</title>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+      }
+
+      .container {
+        width: 350px;
+        margin: 50px auto;
+        padding: 25px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 0 10px gray;
+      }
+
+      h2 {
+        text-align: center;
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0 15px;
+        box-sizing: border-box;
+      }
+
+      button {
+        width: 100%;
+        padding: 10px;
+        background-color: blue;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: darkblue;
+      }
+
+      #message {
+        text-align: center;
+        margin-top: 15px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h2>Registration Form</h2>
+
+      <form id="registrationForm">
+        <label>Full Name</label>
+        <input type="text" id="name" placeholder="Enter your name" />
+
+        <label>Email</label>
+        <input type="email" id="email" placeholder="Enter your email" />
+
+        <label>Phone</label>
+        <input type="tel" id="phone" placeholder="Enter phone number" />
+
+        <label>Gender</label>
+        <select id="gender">
+          <option value="">Select Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
+
+        <label>Password</label>
+        <input type="password" id="password" placeholder="Enter password" />
+
+        <label>Confirm Password</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          placeholder="Confirm password"
+        />
+
+        <button type="submit">Register</button>
+      </form>
+
+      <p id="message"></p>
+    </div>
+
+    <script>
+      document
+        .getElementById("registrationForm")
+        .addEventListener("submit", function (event) {
+          // Form ko submit hone se rokna
+          event.preventDefault();
+
+          let name = document.getElementById("name").value;
+          let email = document.getElementById("email").value;
+          let phone = document.getElementById("phone").value;
+          let gender = document.getElementById("gender").value;
+          let password = document.getElementById("password").value;
+          let confirmPassword =
+            document.getElementById("confirmPassword").value;
+
+          let message = document.getElementById("message");
+
+          // Empty field check
+          if (
+            name === "" ||
+            email === "" ||
+            phone === "" ||
+            gender === "" ||
+            password === "" ||
+            confirmPassword === ""
+          ) {
+            message.innerHTML = "Please fill all fields";
+            message.style.color = "red";
+            return;
+          }
+
+          // Password check
+          if (password !== confirmPassword) {
+            message.innerHTML = "Passwords do not match!";
+            message.style.color = "red";
+            return;
+          }
+
+          // Password length check
+          if (password.length < 6) {
+            message.innerHTML = "Password must be at least 6 characters";
+            message.style.color = "red";
+            return;
+          }
+
+          // Successful registration
+          message.innerHTML = "Registration Successful!";
+          message.style.color = "green";
+
+          console.log("Name:", name);
+          console.log("Email:", email);
+          console.log("Phone:", phone);
+          console.log("Gender:", gender);
+        });
+    </script>
+  </body>
+</html>
